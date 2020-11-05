@@ -23,7 +23,6 @@ function Search() {
             .then(data => {
                 page = data.page
                 totalPages = data.total_pages
-                console.log(page, totalPages)
                 setMovies(data.results)
                 setLoading(false)
             })
@@ -56,7 +55,6 @@ function Search() {
                 onEndReached={() => {
                   if(page < totalPages) {
                     loadMovies()
-                    // handleSearch()
                   }
                 }}
                 />
