@@ -3,7 +3,28 @@ import { StyleSheet, View, TextInput, ActivityIndicator, Button, FlatList} from 
 import FilmItem from './FilmItem'
 
 import {getFilmsFromApiWithSearchedText} from '../API/TMDBApi'
-function Search() {
+
+const styles = StyleSheet.create({
+    input: {
+      marginLeft: 10, 
+      marginRight: 10, 
+      height: 50, 
+      borderColor: '#000000', 
+      borderWidth: 1, 
+      paddingLeft: 5 
+    },
+    loading_container: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 200,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+});
+  
+function Search({navigation}) {
     let page = 0
     let totalPages = 0
     const [input, setInput] = useState("")
@@ -29,6 +50,10 @@ function Search() {
 
     }
 
+    const getFilmDetail = (filmId) => {
+        navigation.navigate("FilmDetail", { filmId: filmId })
+    }
+
     const displayLoading = () => {
         if(isLoading) {
             <View style={styles.loading_container}>
@@ -49,7 +74,7 @@ function Search() {
                 <Button title="Rechercher" onPress={() => {handleSearch()}}/>
                 <FlatList
                 data={movies}
-                renderItem={({item}) => <FilmItem film={item} />}
+                renderItem={({item}) => <FilmItem film={item} getFilmDetail={getFilmDetail}/>}
                 keyExtractor={ (item) => item.id.toString()}  
                 onEndReachedThreshold={0.5}
                 onEndReached={() => {
@@ -63,24 +88,4 @@ function Search() {
         </View>
     )
 }
-const styles = StyleSheet.create({
-    input: {
-      marginLeft: 10, 
-      marginRight: 10, 
-      height: 50, 
-      borderColor: '#000000', 
-      borderWidth: 1, 
-      paddingLeft: 5 
-    },
-    loading_container: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 200,
-        bottom: 0,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-  });
-  
 export default Search

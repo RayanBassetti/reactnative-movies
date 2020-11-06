@@ -1,8 +1,11 @@
+import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
-const Stack = createStackNavigator();
 import Search from '../components/Search'
+import Home from '../components/Home'
+import FilmDetail from '../components/FilmDetail'
 
-function RootStack() {
+const Stack = createStackNavigator();
+function Routes() {
   return (
     <Stack.Navigator
       initialRouteName="Rechercher"
@@ -10,16 +13,20 @@ function RootStack() {
     >
       <Stack.Screen
         name="Rechercher"
-        component={Search}
         options={{ title: 'Rechercher' }}
-      />
-      {/* <Stack.Screen
-        name="Profile"
-        component={ProfileScreen}
-        initialParams={{ user: 'me' }}
-      /> */}
+      >
+        {props => <Search {...props}/>}
+      </Stack.Screen>
+
+      <Stack.Screen
+        name="FilmDetail"
+        options={{ title: 'Détail du film' }}
+      >
+        {props => <FilmDetail {...props}/>}
+      </Stack.Screen>
+
     </Stack.Navigator>
   );
 }
 
-export default RootStack
+export default Routes
