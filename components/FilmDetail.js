@@ -17,10 +17,27 @@ const styles = StyleSheet.create({
       justifyContent: 'center'
     },
     itemImage: {
-        width: 120,
+        width: '100%',
         height: 180,
-        margin: 5,
+        marginRight: 10
     },
+    itemTitle: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 20,
+        marginBottom: 20
+    },
+    itemOverview: {
+        fontStyle: 'italic',
+        color: 'grey',
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 10
+    },
+    itemDescription: {
+        marginLeft: 10
+    }
 })
 
 function FilmDetail(props) {
@@ -30,7 +47,6 @@ function FilmDetail(props) {
 
     useEffect(() => {
         getFilmDetailFromApi(filmId).then(data => handleData(data))
-        console.log(film)
     }, [])
 
     const handleData = (data) => {
@@ -51,13 +67,14 @@ function FilmDetail(props) {
                     style={styles.itemImage}
                     source={{uri: getImageFromApi(film.poster_path)}}
                     />
-                    <View>
-                        <View>
-                            <Text>{film.title}</Text>
-                            <Text>{film.vote_average}</Text>
-                        </View>
-                        <Text>{film.overview}</Text>
+                    <Text style={styles.itemTitle}>{film.title}</Text>
+                    <Text style={styles.itemOverview}>{film.overview}</Text>
+                    <View style={styles.itemDescription}>
+                        <Text>Note : {film.vote_average}/10</Text>
                         <Text>Sorti le {film.release_date}</Text>
+                        <Text>Nombres de votes : {film.vote_count}</Text>
+                        <Text>Budget : {film.budget}$</Text>
+                        <Text>Companie(s) : {film.release_date}</Text>
                     </View>
                 </ScrollView>
 

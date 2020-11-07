@@ -29,9 +29,10 @@ function Search({navigation}) {
     let totalPages = 0
     const [input, setInput] = useState("")
     const [movies, setMovies] = useState([])
-    const [isLoading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const handleSearch = () => {
+        setLoading(true)
         page = 0
         totalPages = 0
         setMovies([])
@@ -39,7 +40,6 @@ function Search({navigation}) {
     }
 
     const loadMovies = () => {
-        setLoading(true)
         getFilmsFromApiWithSearchedText(input, page + 1)
             .then(data => {
                 page = data.page
@@ -53,15 +53,7 @@ function Search({navigation}) {
     const getFilmDetail = (filmId) => {
         navigation.navigate("FilmDetail", { filmId: filmId })
     }
-
-    const displayLoading = () => {
-        if(isLoading) {
-            <View style={styles.loading_container}>
-            <ActivityIndicator size='large' />
-        </View>
-        } 
-    }
-
+    
     return(
         <View style={styles.container}>  
             <View style={{marginTop: 50}}>
@@ -72,18 +64,24 @@ function Search({navigation}) {
                     onSubmitEditing={() =>{handleSearch()}}
                 />
                 <Button title="Rechercher" onPress={() => {handleSearch()}}/>
-                <FlatList
-                data={movies}
-                renderItem={({item}) => <FilmItem film={item} getFilmDetail={getFilmDetail}/>}
-                keyExtractor={ (item) => item.id.toString()}  
-                onEndReachedThreshold={0.5}
-                onEndReached={() => {
-                  if(page < totalPages) {
-                    loadMovies()
-                  }
-                }}
-                />
-                {displayLoading()}
+                {loading &&
+                    <View style={styles.loading_container}>
+                        <ActivityIndicator size='large' />
+                    </View>
+                }
+                {!loading &&
+                    <FlatList
+                    data={movies}
+                    renderItem={({item}) => <FilmItem film={item} getFilmDetail={getFilmDetail}/>}
+                    keyExtractor={ (item) => item.id.toString()}  
+                    onEndReachedThreshold={0.5}
+                    onEndReached={() => {
+                    if(page < totalPages) {
+                        loadMovies()
+                    }
+                    }}
+                    />
+                }
             </View>
         </View>
     )
