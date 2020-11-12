@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput, ActivityIndicator, Button, FlatList} from 
 import FilmItem from './FilmItem'
 
 import {getFilmsFromApiWithSearchedText} from '../API/TMDBApi'
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
     input: {
@@ -24,7 +25,8 @@ const styles = StyleSheet.create({
     }
 });
   
-function Search({navigation}) {
+function Search(props) {
+    const {navigation, favoriteFilms} = props
     let page = 0
     let totalPages = 0
     const [input, setInput] = useState("")
@@ -72,8 +74,13 @@ function Search({navigation}) {
                 {!loading &&
                     <FlatList
                     data={movies}
-                    renderItem={({item}) => <FilmItem film={item} getFilmDetail={getFilmDetail}/>}
+                    renderItem={({item}) => <FilmItem 
+                                                film={item} 
+                                                getFilmDetail={getFilmDetail}
+                                                isFavorite={(favoriteFilms.findIndex(film => film.id === item.id) !== -1) ? true : false}
+                                            />}
                     keyExtractor={ (item) => item.id.toString()}  
+                    extraData={favoriteFilms}
                     onEndReachedThreshold={0.5}
                     onEndReached={() => {
                     if(page < totalPages) {
@@ -86,4 +93,11 @@ function Search({navigation}) {
         </View>
     )
 }
-export default Search
+
+const mapStateToProps = (state) => {
+    return {
+        favoriteFilms: state.favoriteFilms
+    }
+}
+
+export default connect(mapStateToProps)(Search)

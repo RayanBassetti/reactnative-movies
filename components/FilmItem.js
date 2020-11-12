@@ -1,14 +1,11 @@
 import React from 'react'
 
 import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native'
-import { connect } from 'react-redux'
 
 import {getImageFromApi} from '../API/TMDBApi'
 
 function FilmItem(props) {
-
-    const {film, getFilmDetail, favoriteFilms} = props
-
+    const {film, getFilmDetail, isFavorite} = props
     return (
         <TouchableOpacity style={styles.itemView} onPress={() => {getFilmDetail(film.id)}}>
             <Image 
@@ -17,7 +14,12 @@ function FilmItem(props) {
             />
             <View style={styles.itemContent}>
                 <View style={styles.itemHeader}>
-
+                    {isFavorite &&
+                        <Image
+                        style={styles.favoriteIcon}
+                        source={require('../assets/ic_favorite.png')}
+                        />
+                    }
                     <Text style={styles.itemTitle}>{film.title}</Text>
                     <Text style={styles.itemRating}>{film.vote_average}</Text>
                 </View>
@@ -43,6 +45,10 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         shadowRadius: 5, 
     },
+    favoriteIcon: {
+        width: 20,
+        height: 20
+    },
     itemImage: {
         width: 120,
         height: 180,
@@ -55,7 +61,8 @@ const styles = StyleSheet.create({
     itemHeader: {
         flex: 3,
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     itemTitle: {
         flex: 1,
@@ -83,10 +90,4 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = (state) => {
-    return {
-        favoriteFilms: state.favoriteFilms
-    }
-}
-
-export default connect(mapStateToProps)(FilmItem)
+export default FilmItem

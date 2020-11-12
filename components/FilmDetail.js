@@ -50,11 +50,10 @@ const styles = StyleSheet.create({
 })
 
 function FilmDetail(props) {
-    const {dispatch} = props
+    const {dispatch, favoriteFilms} = props
     const {filmId} = props.route.params
     const [film, setFilm] = useState(undefined)
     const [loading, setLoading] = useState(true)
-    const [isFav, setIsFav] = useState(false)
 
     
     
@@ -70,6 +69,11 @@ function FilmDetail(props) {
     const handleData = (data) => {
         setFilm(data)
         setLoading(false)
+    }
+
+    const handleFavButton = () => {
+        return favoriteFilms.findIndex(film => film.id === filmId) !== -1 ? 
+        <Image style={styles.favorite_image} source={require('../assets/ic_favorite.png')}/> : <Image style={styles.favorite_image} source={require('../assets/ic_favorite_border.png')}/>
     }
 
     return (
@@ -90,10 +94,7 @@ function FilmDetail(props) {
                         style={styles.favoriteContainer}
                         onPress={() => toggleFavorite()} 
                     >
-                        <Image
-                        style={styles.favorite_image}
-                        source={require('../assets/ic_favorite.png')}
-                        />
+                        {handleFavButton()}
                     </TouchableOpacity>
                     <Text style={styles.itemOverview}>{film.overview}</Text>
                     <View style={styles.itemDescription}>
