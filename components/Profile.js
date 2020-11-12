@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     }
 })
 
-function Home({navigation}) {
+function Profile({navigation}) {
     return(
         <View style={styles.container}>
             <Button title="Go to searching" onPress={() => {navigation.navigate("Rechercher")}} />
@@ -16,4 +16,4 @@ function Home({navigation}) {
     )
 }
 
-export default Home
+export default Profile

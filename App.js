@@ -5,16 +5,14 @@ import { Provider } from 'react-redux'
 import Store from './Store/configureStore'
 
 
-import RootStack from './Navigation/Navigation'
-// import Menu from './Menu'
+import Tab from './Navigation/Navigation'
 
 export default function App() {
   return (
     <View style={{flex: 1}}>
       <Provider store={Store}>
         <NavigationContainer>
-          <RootStack />
-          {/* <Menu /> */}
+          <Tab />
         </NavigationContainer>
       </Provider>
     </View>
