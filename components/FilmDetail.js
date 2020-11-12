@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Image, StyleSheet, Text, View, ActivityIndicator } from 'react-native'
+import { Image, StyleSheet, Text, View, ActivityIndicator, Button } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { getImageFromApi, getFilmDetailFromApi } from '../API/TMDBApi'
+import { connect } from 'react-redux'
+
 
 const styles = StyleSheet.create({
     container: {
@@ -41,6 +43,7 @@ const styles = StyleSheet.create({
 })
 
 function FilmDetail(props) {
+    const {dispatch} = props
     const {filmId} = props.route.params
     const [film, setFilm] = useState(undefined)
     const [loading, setLoading] = useState(true)
@@ -48,6 +51,12 @@ function FilmDetail(props) {
     useEffect(() => {
         getFilmDetailFromApi(filmId).then(data => handleData(data))
     }, [])
+
+    const toggleFavorite = () => {
+        const action = { type: "TOGGLE_FAVORITE", value: film }
+        props.dispatch(action)
+        console.log(props.favoriteFilms)
+    }
 
     const handleData = (data) => {
         setFilm(data)
@@ -68,6 +77,7 @@ function FilmDetail(props) {
                     source={{uri: getImageFromApi(film.poster_path)}}
                     />
                     <Text style={styles.itemTitle}>{film.title}</Text>
+                    <Button title="Favoris" onPress={() => toggleFavorite()} />
                     <Text style={styles.itemOverview}>{film.overview}</Text>
                     <View style={styles.itemDescription}>
                         <Text>Note : {film.vote_average}/10</Text>
@@ -83,4 +93,10 @@ function FilmDetail(props) {
     )
 }
 
-export default FilmDetail
+const mapStateToProps = (state) => {
+    return {
+        favoriteFilms: state.favoriteFilms
+    }
+}
+  
+export default connect(mapStateToProps)(FilmDetail)
