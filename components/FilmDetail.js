@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Image, StyleSheet, Text, View, ActivityIndicator, Button } from 'react-native'
+import { Image, StyleSheet, Text, View, ActivityIndicator, Button, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { getImageFromApi, getFilmDetailFromApi } from '../API/TMDBApi'
 import { connect } from 'react-redux'
@@ -17,6 +17,13 @@ const styles = StyleSheet.create({
       bottom: 0,
       alignItems: 'center',
       justifyContent: 'center'
+    },
+    favoriteContainer: {
+        alignItems: 'center'
+    },
+    favoriteImage: {
+      width: 40,
+      height: 40
     },
     itemImage: {
         width: '100%',
@@ -47,19 +54,17 @@ function FilmDetail(props) {
     const {filmId} = props.route.params
     const [film, setFilm] = useState(undefined)
     const [loading, setLoading] = useState(true)
-    console.log(props)
+    const [isFav, setIsFav] = useState(false)
 
+    
+    
     useEffect(() => {
         getFilmDetailFromApi(filmId).then(data => handleData(data))
     }, [])
 
-    // useEffect(() => {
-    //     console.log("ComponentDidUpdate", props)
-    // }, [props.state.favoriteFilms])
-
     const toggleFavorite = () => {
         const action = { type: "TOGGLE_FAVORITE", value: film }
-        props.dispatch(action)
+        dispatch(action)
     }
 
     const handleData = (data) => {
@@ -81,7 +86,15 @@ function FilmDetail(props) {
                     source={{uri: getImageFromApi(film.poster_path)}}
                     />
                     <Text style={styles.itemTitle}>{film.title}</Text>
-                    <Button title="Favoris" onPress={() => toggleFavorite()} />
+                    <TouchableOpacity 
+                        style={styles.favoriteContainer}
+                        onPress={() => toggleFavorite()} 
+                    >
+                        <Image
+                        style={styles.favorite_image}
+                        source={require('../assets/ic_favorite.png')}
+                        />
+                    </TouchableOpacity>
                     <Text style={styles.itemOverview}>{film.overview}</Text>
                     <View style={styles.itemDescription}>
                         <Text>Note : {film.vote_average}/10</Text>

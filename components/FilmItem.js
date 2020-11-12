@@ -1,10 +1,14 @@
 import React from 'react'
 
 import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native'
+import { connect } from 'react-redux'
 
 import {getImageFromApi} from '../API/TMDBApi'
 
-function FilmItem({film, getFilmDetail}) {
+function FilmItem(props) {
+
+    const {film, getFilmDetail, favoriteFilms} = props
+
     return (
         <TouchableOpacity style={styles.itemView} onPress={() => {getFilmDetail(film.id)}}>
             <Image 
@@ -13,6 +17,7 @@ function FilmItem({film, getFilmDetail}) {
             />
             <View style={styles.itemContent}>
                 <View style={styles.itemHeader}>
+
                     <Text style={styles.itemTitle}>{film.title}</Text>
                     <Text style={styles.itemRating}>{film.vote_average}</Text>
                 </View>
@@ -78,4 +83,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default FilmItem
+const mapStateToProps = (state) => {
+    return {
+        favoriteFilms: state.favoriteFilms
+    }
+}
+
+export default connect(mapStateToProps)(FilmItem)
