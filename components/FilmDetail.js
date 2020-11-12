@@ -47,15 +47,19 @@ function FilmDetail(props) {
     const {filmId} = props.route.params
     const [film, setFilm] = useState(undefined)
     const [loading, setLoading] = useState(true)
+    console.log(props)
 
     useEffect(() => {
         getFilmDetailFromApi(filmId).then(data => handleData(data))
     }, [])
 
+    // useEffect(() => {
+    //     console.log("ComponentDidUpdate", props)
+    // }, [props.state.favoriteFilms])
+
     const toggleFavorite = () => {
         const action = { type: "TOGGLE_FAVORITE", value: film }
         props.dispatch(action)
-        console.log(props.favoriteFilms)
     }
 
     const handleData = (data) => {
