@@ -35,6 +35,10 @@ function TabsScreens() {
       tabBarOptions={{
         activeTintColor: 'blue',
         inactiveTintColor: 'gray',
+        activeBackgroundColor: '#DDDDDD', // Couleur d'arrière-plan de l'onglet sélectionné
+        inactiveBackgroundColor: '#FFFFFF', // Couleur d'arrière-plan des onglets non sélectionnés
+        // showLabel: false, // On masque les titres
+        // showIcon: true // On informe le TabNavigator qu'on souhaite afficher les icônes définis
       }}
     >
       <Tabs.Screen 
@@ -76,12 +80,22 @@ function SearchStackScreen() {
 
 function FavorisStackScreen() {
   return (
-    <FavorisStack.Navigator>
+    <FavorisStack.Navigator
+    initialRouteName="Favoris"
+    screenOptions={{ gestureEnabled: false }}
+    >
       <FavorisStack.Screen        
         name="Favoris"
         options={{ title: 'Films favoris' }}
       >
         {props => <Favorites {...props}/>}
+
+      </FavorisStack.Screen>
+      <FavorisStack.Screen        
+        name="FilmDetail"
+        options={{ title: 'Détail du film' }}
+      >
+        {props => <FilmDetail {...props}/>}
 
       </FavorisStack.Screen>
       {/* <FavorisStack.Screen></FavorisStack.Screen> */}

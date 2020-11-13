@@ -1,9 +1,10 @@
 import React, {useState} from 'react'
 import { StyleSheet, View, TextInput, ActivityIndicator, Button, FlatList} from 'react-native'
-import FilmItem from './FilmItem'
-
 import {getFilmsFromApiWithSearchedText} from '../API/TMDBApi'
 import { connect } from 'react-redux';
+
+import FilmItem from './FilmItem'
+import FilmList from './FilmList'
 
 const styles = StyleSheet.create({
     input: {
@@ -51,10 +52,6 @@ function Search(props) {
             })
 
     }
-
-    const getFilmDetail = (filmId) => {
-        navigation.navigate("FilmDetail", { filmId: filmId })
-    }
     
     return(
         <View style={styles.container}>  
@@ -72,21 +69,10 @@ function Search(props) {
                     </View>
                 }
                 {!loading &&
-                    <FlatList
-                    data={movies}
-                    renderItem={({item}) => <FilmItem 
-                                                film={item} 
-                                                getFilmDetail={getFilmDetail}
-                                                isFavorite={(favoriteFilms.findIndex(film => film.id === item.id) !== -1) ? true : false}
-                                            />}
-                    keyExtractor={ (item) => item.id.toString()}  
-                    extraData={favoriteFilms}
-                    onEndReachedThreshold={0.5}
-                    onEndReached={() => {
-                    if(page < totalPages) {
-                        loadMovies()
-                    }
-                    }}
+                    <FilmList
+                    movies={movies}
+                    navigation={navigation}
+                    isFavorite={false}
                     />
                 }
             </View>
