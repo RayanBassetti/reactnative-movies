@@ -5,6 +5,8 @@ import Search from '../components/Search'
 import Favorites from '../components/Favorites'
 import FilmDetail from '../components/FilmDetail'
 
+// https://www.youtube.com/watch?v=nQVCkqvU1uE
+
 const SearchStack = createStackNavigator()
 const FavorisStack = createStackNavigator()
 const Tabs = createBottomTabNavigator()
@@ -48,7 +50,11 @@ function SearchStackScreen() {
 function FavorisStackScreen() {
   return (
     <FavorisStack.Navigator>
-      <FavorisStack.Screen>
+      <FavorisStack.Screen        
+        name="Favoris"
+        options={{ title: 'Films favoris' }}
+      >
+        {props => <Favorites {...props}/>}
 
       </FavorisStack.Screen>
       {/* <FavorisStack.Screen></FavorisStack.Screen> */}

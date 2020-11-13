@@ -5,14 +5,14 @@ import { Provider } from 'react-redux'
 import Store from './Store/configureStore'
 
 
-import Tab from './Navigation/Navigation'
+import TabsScreens from './Navigation/Navigation'
 
 export default function App() {
   return (
     <View style={{flex: 1}}>
       <Provider store={Store}>
         <NavigationContainer>
-          <Tab />
+          <TabsScreens />
         </NavigationContainer>
       </Provider>
     </View>
