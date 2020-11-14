@@ -4,12 +4,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Search from '../components/Search'
 import Favorites from '../components/Favorites'
 import FilmDetail from '../components/FilmDetail'
+import Test from '../components/Test'
 import { Image, StyleSheet } from 'react-native';
 
 // https://www.youtube.com/watch?v=nQVCkqvU1uE
 
 const SearchStack = createStackNavigator()
 const FavorisStack = createStackNavigator()
+const TestStack = createStackNavigator()
 const Tabs = createBottomTabNavigator()
 
 const styles = StyleSheet.create({
@@ -29,6 +31,8 @@ function TabsScreens() {
             return <Image style={styles.iconStyle} source={require('../assets/ic_search.png')}/>
           } else if (route.name === 'Favoris') {
             return <Image style={styles.iconStyle} source={require('../assets/ic_favorite.png')}/>
+          } else if (route.name === 'Test') {
+            return <Image style={styles.iconStyle} source={require('../assets/ic_favorite.png')} />
           }
         },
       })}
@@ -41,6 +45,10 @@ function TabsScreens() {
         // showIcon: true // On informe le TabNavigator qu'on souhaite afficher les icônes définis
       }}
     >
+      <Tabs.Screen 
+        name="Test" 
+        component={TestStackScreen}
+      />
       <Tabs.Screen 
         name="Rechercher" 
         component={SearchStackScreen}
@@ -100,5 +108,21 @@ function FavorisStackScreen() {
       </FavorisStack.Screen>
       {/* <FavorisStack.Screen></FavorisStack.Screen> */}
     </FavorisStack.Navigator>
+  )
+}
+function TestStackScreen() {
+  return (
+    <TestStack.Navigator
+    initialRouteName="Test"
+    screenOptions={{ gestureEnabled: false }}
+    >
+      <TestStack.Screen        
+        name="Test"
+        options={{ title: 'Mes tests' }}
+      >
+        {props => <Test {...props}/>}
+
+      </TestStack.Screen>
+    </TestStack.Navigator>
   )
 }

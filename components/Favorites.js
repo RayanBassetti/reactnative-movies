@@ -7,7 +7,6 @@ const styles = StyleSheet.create({})
 
 function Favorites(props) {
     const {favoriteFilms, navigation} = props
-    console.log(props)
     return (
         <View>
             {favoriteFilms.length === 0 &&

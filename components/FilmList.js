@@ -22,9 +22,11 @@ function FilmList(props) {
         extraData={favoriteFilms}
         onEndReachedThreshold={0.5}
         onEndReached={() => {
+            //if (!isFavorite) {
             // if(page < totalPages) {
             //     loadMovies()
             // }
+            //}
         }}
         />
     )
