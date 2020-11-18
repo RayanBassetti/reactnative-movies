@@ -2,20 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { Animated, Dimensions } from 'react-native'
 
 function FadeIn({children}) {
-    const [positionLeft, setPositionLeft] = useState(new Animated.Value(Dimensions.get('window').width))
+    const [positionRight, setPositionRight] = useState(new Animated.Value(Dimensions.get('window').width))
 
     useEffect(() => {
         Animated.spring(
-            positionLeft,
+            positionRight,
             {
-                toValue: 0
+                toValue: 0,
+                useNativeDriver: false
             }
         ).start()
     }, [])
 
     return (
-        <Animated.View 
-            style={{left: positionLeft}}>
+        <Animated.View style={{right: positionRight}}>
         {children}
         </Animated.View>
     )

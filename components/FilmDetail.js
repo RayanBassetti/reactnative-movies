@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View, ActivityIndicator, Button, TouchableOpac
 import { ScrollView } from 'react-native-gesture-handler'
 import { getImageFromApi, getFilmDetailFromApi } from '../API/TMDBApi'
 import { connect } from 'react-redux'
-
+import FavTouch from '../Animation/FavTouch'
 
 const styles = StyleSheet.create({
     container: {
@@ -21,9 +21,10 @@ const styles = StyleSheet.create({
     favoriteContainer: {
         alignItems: 'center'
     },
-    favoriteImage: {
-      width: 40,
-      height: 40
+    favIcon: {
+        flex: 1,
+        width: null,
+        height: null
     },
     itemImage: {
         width: '100%',
@@ -50,13 +51,12 @@ const styles = StyleSheet.create({
 })
 
 function FilmDetail(props) {
+
     const {dispatch, favoriteFilms} = props
     const {filmId} = props.route.params
     const [film, setFilm] = useState(undefined)
     const [loading, setLoading] = useState(true)
 
-    
-    
     useEffect(() => {
         getFilmDetailFromApi(filmId).then(data => handleData(data))
     }, [])
@@ -72,8 +72,19 @@ function FilmDetail(props) {
     }
 
     const handleFavButton = () => {
-        return favoriteFilms.findIndex(film => film.id === filmId) !== -1 ? 
-        <Image style={styles.favorite_image} source={require('../assets/ic_favorite.png')}/> : <Image style={styles.favorite_image} source={require('../assets/ic_favorite_border.png')}/>
+        let shouldEnlarge = false
+        let imageAsset = require('../assets/ic_favorite_border.png')
+        if(favoriteFilms.findIndex(film => film.id === filmId) !== -1) { // if we find the movie
+            shouldEnlarge = true
+            imageAsset = require('../assets/ic_favorite.png')
+        }
+
+        return (
+            <FavTouch shouldEnlarge={shouldEnlarge}>
+                <Image style={styles.favIcon} source={imageAsset}/>
+            </FavTouch>
+
+        )
     }
 
     return (
