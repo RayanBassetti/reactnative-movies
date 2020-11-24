@@ -5,7 +5,7 @@ import Search from '../components/Search'
 import Favorites from '../components/Favorites'
 import FilmDetail from '../components/FilmDetail'
 import Test from '../components/Test'
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, Button } from 'react-native';
 
 // https://www.youtube.com/watch?v=nQVCkqvU1uE
 
@@ -71,14 +71,22 @@ function SearchStackScreen() {
     >
       <SearchStack.Screen
         name="Rechercher"
-        options={{ title: 'Rechercher' }}
       >
         {props => <Search {...props}/>}
       </SearchStack.Screen>
 
       <SearchStack.Screen
         name="FilmDetail"
-        options={{ title: 'Détail du film' }}
+        options={{ 
+          title: 'Détail du film',
+          headerRight: () => (
+            <Button
+              onPress={() => alert('This is a button!')}
+              title="Info"
+              color="#fff"
+            />
+          ),
+        }}
       >
         {props => <FilmDetail {...props}/>}
       </SearchStack.Screen>
@@ -110,6 +118,7 @@ function FavorisStackScreen() {
     </FavorisStack.Navigator>
   )
 }
+
 function TestStackScreen() {
   return (
     <TestStack.Navigator

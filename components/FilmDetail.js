@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Image, StyleSheet, Text, View, ActivityIndicator, Button, TouchableOpacity } from 'react-native'
+import { Image, StyleSheet, Text, View, ActivityIndicator, Share, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { getImageFromApi, getFilmDetailFromApi } from '../API/TMDBApi'
 import { connect } from 'react-redux'
@@ -60,6 +60,10 @@ function FilmDetail(props) {
     useEffect(() => {
         getFilmDetailFromApi(filmId).then(data => handleData(data))
     }, [])
+    
+    const Share = () => {
+        Share.share({title: film.title, message: film.overview})
+    }
 
     const toggleFavorite = () => {
         const action = { type: "TOGGLE_FAVORITE", value: film }
