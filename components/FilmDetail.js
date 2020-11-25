@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Image, StyleSheet, Text, View, ActivityIndicator, Share, TouchableOpacity } from 'react-native'
+import { Image, StyleSheet, Text, View, ActivityIndicator, Share, TouchableOpacity, Platform } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { getImageFromApi, getFilmDetailFromApi } from '../API/TMDBApi'
 import { connect } from 'react-redux'
 import FavTouch from '../Animation/FavTouch'
+
+/*
+Comment ça marche le partage via React Navigation : 
+- On va transférer dans les paramètres de navigation notre film et notre fonction pour partager
+- On appelle ces params dans une fonction navigationOptions pour charger le header avec notre component de partage
+*/
 
 const styles = StyleSheet.create({
     container: {
@@ -47,22 +53,66 @@ const styles = StyleSheet.create({
     },
     itemDescription: {
         marginLeft: 10
-    }
+    },
+    share_touchable_floatingactionbutton: {
+        position: 'absolute',
+        width: 60,
+        height: 60,
+        right: 30,
+        bottom: 30,
+        borderRadius: 30,
+        backgroundColor: '#e91e63',
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      share_image: {
+        width: 30,
+        height: 30
+      }
 })
 
 function FilmDetail(props) {
 
-    const {dispatch, favoriteFilms} = props
+    const {dispatch, favoriteFilms, navigation} = props
     const {filmId} = props.route.params
     const [film, setFilm] = useState(undefined)
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        getFilmDetailFromApi(filmId).then(data => handleData(data))
+    useEffect(() => { // ComponentDidMount
+        getFilmDetailFromApi(filmId)
+            .then(data => handleData(data))
+            .catch(err => console.log(err))
     }, [])
+
+    useEffect(() => { // ComponentDidUpdate
+        updateNavigationParams()
+    }, [film])
+
+    const updateNavigationParams = () => {
+        // On accède à la fonction shareFilm et au film via les paramètres qu'on a ajouté à la navigation
+        if (film != undefined && Platform.OS === 'ios') {
+            // On a besoin d'afficher une image, il faut donc passe par une Touchable une fois de plus
+            navigation.setOptions({
+              headerRight: () => (
+                  <TouchableOpacity
+                      style={styles.share_touchable_headerrightbutton}
+                      onPress={() => shareFilm(film)}
+                  >
+                      <Image
+                          style={styles.share_image}
+                          source={require('../assets/ic_share.png')} 
+                      />
+                  </TouchableOpacity>
+              )
+        })
+      }
+    }
     
-    const Share = () => {
-        Share.share({title: film.title, message: film.overview})
+    const shareFilm = (film) => {
+        Share.share({
+            title: film.title, 
+            message: film.overview
+        })
     }
 
     const toggleFavorite = () => {
@@ -89,6 +139,20 @@ function FilmDetail(props) {
             </FavTouch>
 
         )
+    }
+
+    const displayFloatingButton = () => {
+        if (film != undefined && Platform.OS === 'android') { // Uniquement sur Android et lorsque le film est chargé
+          return (
+            <TouchableOpacity
+              style={styles.share_touchable_floatingactionbutton}
+              onPress={() => shareFilm()}>
+              <Image
+                style={styles.share_image}
+                source={require('../assets/ic_share.png')} />
+            </TouchableOpacity>
+          )
+        }
     }
 
     return (
@@ -119,6 +183,7 @@ function FilmDetail(props) {
                         <Text>Budget : {film.budget}$</Text>
                         <Text>Companie(s) : {film.release_date}</Text>
                     </View>
+                    {displayFloatingButton()}
                 </ScrollView>
 
             }
